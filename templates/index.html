@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Character Database</title>
+    </head>
+    <body>
+        <h1>Character Database</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Race</th>
+                    <th>Class</th>
+                    <th>Equipment</th>
+                    <th>Backstory</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for character in characters %}
+                    <tr>
+                        <td>{{ character.name }}</td>
+                        <td>{{ character.race }}</td>
+                        <td>{{ character._class }}</td>
+                        <td>{{ character.equipment }}</td>
+                        <td>{{ character.backstory }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

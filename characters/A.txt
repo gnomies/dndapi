@@ -1,0 +1,11 @@
+Character Name: A
+Race: halfling
+Class: warlock
+Equipment: sling
+
+Backstory:
+A was born into a small farming family living on the edge of a small town in the countryside. From a young age, A showed an aptitude for magic and was drawn to the ancient stories of magic and the dark forces of the world. A was fascinated by learning more about the power of arcane magics, and sought out knowledge wherever they could find it.
+
+As A grew, so did their powers. They were able to understand and draw upon the force of the primal and dark energies around them, sometimes without their conscious effort. Their parents were scared of what was happening, and began to fear that A was becoming more and more powerful.
+
+Out of fear, A's parents nearly sold them into slavery in a neighboring
