@@ -5,6 +5,7 @@ import openai
 from dotenv import load_dotenv
 import sqlite3
 
+
 # Load .env file
 load_dotenv()
 
@@ -18,7 +19,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
 # Connect to the database (or create it if it doesn't exist)
-conn = sqlite3.connect('db/characters.db')
+conn = sqlite3.connect('flaskr/db/characters.db')
 
 # Create a cursor object to execute SQL commands
 c = conn.cursor()
@@ -26,7 +27,7 @@ c = conn.cursor()
 # Create table if it doesn't exist
 c.execute('''
     CREATE TABLE IF NOT EXISTS characters
-    (name TEXT, race TEXT, class TEXT, equipment TEXT, backstory TEXT)
+    (id INTEGER PRIMARY KEY, name TEXT, race TEXT, _class TEXT, equipment TEXT, backstory TEXT)
     ''')
 
 def get_random_race():
@@ -67,7 +68,7 @@ def generate_backstory(character):
     return response.choices[0].text.strip()
 
 def output_to_database(character, backstory):
-    c.execute("INSERT INTO characters (name, race, class, equipment, backstory) VALUES (?, ?, ?, ?, ?)",
+    c.execute("INSERT INTO characters (name, race, _class, equipment, backstory) VALUES (?, ?, ?, ?, ?)",
               (character['name'], character['race'], character['class'], character['equipment'], backstory))
     conn.commit()
 
