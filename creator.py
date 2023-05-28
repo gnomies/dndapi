@@ -19,7 +19,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
 # Connect to the database (or create it if it doesn't exist)
-conn = sqlite3.connect('flaskr/db/characters.db')
+conn = sqlite3.connect('db/characters.db')
 
 # Create a cursor object to execute SQL commands
 c = conn.cursor()
@@ -46,7 +46,7 @@ def get_random_equipment():
     return random.choice(equipment)['index']
 
 def generate_character_name():
-    response = openai.Completion.create(engine="text-davinci-003", prompt="Generate a unique name for a fantasy character", max_tokens=30)
+    response = openai.Completion.create(engine="text-davinci-003", prompt= f"Generate a unique name for a {get_random_race()} fantasy character ", max_tokens=30)
     return response.choices[0].text.strip()
 
 def generate_character():
