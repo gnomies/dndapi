@@ -25,9 +25,6 @@ def exponential_backoff(func, max_retries=5):
 # Load .env file
 load_dotenv()
 
-# Base URL for the DnD API
-API_URL = "https://www.dnd5eapi.co"
-
 # Get OpenAI API key from .env file
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -63,10 +60,7 @@ if __name__ == "__main__":
 
     # Create the tables
     create_table("characters", character_fields)
-    create_table("races", race_fields)
-    create_table("classes", class_fields)
-    create_table("equipment", equipment_fields)
-    create_table("updates", update_fields)
+
 
 def insert_into_table(table_name, fields, values):
     try:
@@ -112,67 +106,20 @@ def delete_from_table(table_name):
     except sqlite3.Error as e:
         print(f"Error deleting from table {table_name}: {e}")
 
-# Create a function to fetch and store data from the DnD API once every 60 days
-def fetch_and_store_data():
-    
-    # Initialize last_update time
-    insert_into_table('updates', ['id', 'table_name', 'last_update'], [1, 'races', '2000-01-01'])
-    insert_into_table('updates', ['id', 'table_name', 'last_update'], [2, 'classes', '2000-01-01'])
-    insert_into_table('updates', ['id', 'table_name', 'last_update'], [3, 'equipment', '2000-01-01'])
-    
-    # Check last update time
-    last_update = select_from_table('updates', ['last_update'], "table_name = 'races'")
-    # last_update = c.fetchone()
-    if last_update is None or (datetime.datetime.now() - datetime.datetime.strptime(last_update[0][0], "%Y-%m-%d")).days > 60:
-        # Fetch and store races
-        response = requests.get(f"{API_URL}/api/races")
-        races = response.json()['results']
-        # Clear table
-        delete_from_table('races')
-        for race in races:
-            insert_into_table('races', ['race'], [race['index']])
-        # Update last update time
-        insert_into_table('updates', ['id', 'table_name', 'last_update'], [1, 'races', datetime.datetime.now().strftime("%Y-%m-%d")])
-
-    # Do the same for classes 
-    last_update = select_from_table('updates', ['last_update'], "table_name = 'classes'")
-    # last_update = c.fetchone()
-    if last_update is None or (datetime.datetime.now() - datetime.datetime.strptime(last_update[0][0], "%Y-%m-%d")).days > 60:
-        # Fetch and store classes
-        response = requests.get(f"{API_URL}/api/classes")
-        classes = response.json()['results']
-        # Clear table
-        delete_from_table('classes')
-        for _class in classes:
-            insert_into_table('classes', ['class'], [_class['index']])
-        # Update last update time
-        insert_into_table('updates', ['id', 'table_name', 'last_update'], [2, 'classes', datetime.datetime.now().strftime("%Y-%m-%d"),])
-
-    # Do the same for equipment
-    last_update = select_from_table('updates', ['last_update'], "table_name = 'equipment'")
-    # last_update = c.fetchone()
-    if last_update is None or (datetime.datetime.now() - datetime.datetime.strptime(last_update[0][0], "%Y-%m-%d")).days > 60:
-        # Fetch and store equipment
-        response = requests.get(f"{API_URL}/api/equipment")
-        equipment_list = response.json()['results']
-        # Clear table
-        delete_from_table('equipment')
-        for equipment in equipment_list:
-            insert_into_table('equipment', ['equipment'], [equipment['index']])
-        # Update last update time
-        insert_into_table('updates', ['id', 'table_name', 'last_update'], [3, 'equipment', datetime.datetime.now().strftime("%Y-%m-%d")])
-
-    # Commit the changes
-    conn.commit()
-
 def get_random_race():
-    return dnd_utils.get_random_from_api("/api/races")
+    races = select_from_table('races', ['name'])
+    race = random.choice(races)[0]
+    return race
 
 def get_random_class():
-    return dnd_utils.get_random_from_api("/api/classes")
+    classes = select_from_table('classes', ['class'])
+    _class = random.choice(classes)[0]
+    return _class
 
 def get_random_equipment():
-    return dnd_utils.get_random_from_api("/api/equipment")
+    equipment_list = select_from_table('equipment', ['equipment'])
+    equipment = random.choice(equipment_list)[0]
+    return equipment
 
 def roll_ability_score():
     roll = [random.randint(1, 6) for _ in range(4)]
@@ -217,7 +164,6 @@ def output_to_database(character, backstory):
         )
 
 if __name__ == "__main__":
-    fetch_and_store_data()
     character = generate_character()
     print(character)
     backstory = generate_backstory(character)
