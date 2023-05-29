@@ -1,0 +1,55 @@
+Aarakocra
+Aasimar
+Air Genasi
+Astral Elf
+Auto Gnome
+Bugbear
+Centaur
+Changeling
+Deep Gnome
+Dragonborn
+Duergar
+Dwarf
+Earth Genasi
+Eladrin
+Elf
+Fairy
+Firbolg
+Fire Genasi
+Genasi
+Giff
+Gith
+Gnome
+Goblin
+Goliath
+Hadozee
+Half-Elf
+Half-Orc
+Halfling
+Harengon
+Hobgoblin
+Human
+Kalashtar
+Kender
+Kenku
+Kobold
+Leonin
+Lineage
+Lizardfolk
+Loxodon
+Minotaur
+Orc
+Plasmoid
+Satyr
+Shadar-kai
+Shifter
+Simic Hybrid
+Tabaxi
+Thri-kreen
+Tiefling
+Tortle
+Triton
+Vedalken
+Warforged
+Water Genasi
+Yuan-ti Pureblood

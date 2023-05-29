@@ -1,5 +1,19 @@
+# Ignore the environment files
 .env
+test.py
+
+# Ignore the virtual environment:
 venv/
-db/
+
+# Ignore everything in the "build" directory,
+# except the "hello.exe" file:
+build/*
+
+# Ignore all .pdf files in the doc/ directory
+# and any of its subdirectories:
+doc/**/*.pdf
+
+# Ignore all of the db files.
+*.db
 *.sqlite3
-characters/
+*.sqlite
