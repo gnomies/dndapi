@@ -63,6 +63,10 @@ if __name__ == "__main__":
 
 def insert_into_table(table_name, fields, values):
     try:
+        # Connect to the database and create a cursor
+        conn = sqlite3.connect('db/characters.db')
+        c = conn.cursor()
+
         # Prepare the placeholders for the INSERT command
         placeholders = ', '.join('?' * len(values))
 
@@ -74,11 +78,19 @@ def insert_into_table(table_name, fields, values):
 
         # Commit the changes
         conn.commit()
+
+        # Close the cursor and connection
+        c.close()
+        conn.close()
     except sqlite3.Error as e:
         print(f"Error inserting into table {table_name}: {e}")
 
 def select_from_table(table_name, fields, condition=None):
     try:
+        # Connect to the database and create a cursor
+        conn = sqlite3.connect('db/characters.db')
+        c = conn.cursor()
+
         # Prepare the SQL command
         sql_command = f"SELECT {', '.join(fields)} FROM {table_name}"
         if condition is not None:
@@ -88,7 +100,13 @@ def select_from_table(table_name, fields, condition=None):
         c.execute(sql_command)
 
         # Fetch the results
-        return c.fetchall()
+        results = c.fetchall()
+
+        # Close the cursor and connection
+        c.close()
+        conn.close()
+
+        return results
     except sqlite3.Error as e:
         print(f"Error selecting from table {table_name}: {e}")
 
@@ -139,7 +157,7 @@ def generate_character():
     _class, stat_order = get_random_class()
     stats = roll_character_stats()
 
-    # Sort the stats in the order required by the class
+    # Create a list of stats in the order required by the class
     sorted_stats = [stats[stat] for stat in stat_order]
 
     equipment = get_random_equipment()
@@ -148,7 +166,7 @@ def generate_character():
     character = {
         "name": name,
         "race": race,
-        "class": _class,
+        "class": _class,  # this should now be a string, not a tuple
         "equipment": equipment,
         "stats": sorted_stats,
     }

@@ -1,0 +1,203 @@
+form.charsheet
+  header
+    section.charname
+      label for="charname" Character Name
+      input name="charname" placeholder="Thoradin Fireforge"
+    section.misc
+      ul
+        li
+          label for="classlevel"Class & Level
+          input name="classlevel" placeholder="Paladin 2"
+        li
+          label for="background" Background
+          input name="background" placeholder="Acolyte"
+        li
+          label for="playername" Player Name
+          <input name="playername" placeholder="Player McPlayerface">
+        li
+          label for="race" Race
+          input name="race" placeholder="Half-elf"
+        li
+          label for="alignment"Alignment
+          input name="alignment" placeholder="Lawful Good"
+        li
+          label for="experiencepoints" Experience Points
+          input name="experiencepoints" placeholder="3240"
+  
+  main
+    section
+      section.attributes
+        div.scores
+          ul
+            - for attr in [ "Strength", "Dexterity", "Constitution", "Wisdom", "Intelligence", "Charisma" ] do
+              li
+                .score
+                  label for="#{attr}score" #{attr}
+                  input name="#{attr}score" placeholder="10"
+                .modifier
+                  input name="#{attr}mod" placeholder="+0"
+            
+        div.attr-applications
+          div.inspiration.box
+            div.label-container
+              label for="inspiration" Inspiration
+            input name="inspiration" type="checkbox"
+            
+          div.proficiencybonus.box
+            div.label-container
+              label for="proficiencybonus" Proficiency Bonus
+            input name="proficiencybonus" placeholder="+2"
+            
+          div.saves.list-section.box
+            ul
+              - for attr in [ "Strength", "Dexterity", "Constitution", "Wisdom", "Intelligence", "Charisma" ] do
+                li
+                  label for="#{attr}-save" #{attr}
+                  input name="#{attr}-save" type="text" placeholder="+0"
+                  input name="#{attr}-save-prof" type="checkbox"
+            div.label Saving Throws
+
+          div.skills.list-section.box
+            ul
+              - for skill in [ \
+                { "name" => "Acrobatics", "attr" => "Dex"}, \
+                { "name" => "Animal Handling", "attr" => "Wis"}, \
+                { "name" => "Arcana", "attr" => "Int"}, \
+                { "name" => "Athletics", "attr" => "Str"}, \
+                { "name" => "Deception", "attr" => "Cha"}, \
+                { "name" => "History", "attr" => "Int"}, \
+                { "name" => "Insight", "attr" => "Wis"}, \
+                { "name" => "Intimidation", "attr" => "Cha"}, \
+                { "name" => "Investigation", "attr" => "Int"}, \
+                { "name" => "Medicine", "attr" => "Wis"}, \
+                { "name" => "Nature", "attr" => "Int"}, \
+                { "name" => "Perception", "attr" => "Wis"}, \
+                { "name" => "Performance", "attr" => "Cha"}, \
+                { "name" => "Persuasion", "attr" => "Cha"}, \
+                { "name" => "Religion", "attr" => "Int"}, \
+                { "name" => "Sleight of Hand", "attr" => "Dex"}, \
+                { "name" => "Stealth", "attr" => "Dex"}, \
+                { "name" => "Survival", "attr" => "Wis"}, \
+              ] do
+                li
+                  label for="#{skill["name"]}" #{skill["name"]} <span class="skill">(#{skill["attr"]})</span>
+                  input name="#{skill["name"]}" type="text" placeholder="+0"
+                  input name="#{skill["name"]}-prof" type="checkbox"
+            div.label Skills
+            
+      div.passive-perception.box
+        div.label-container
+          label for="passiveperception" Passive Wisdom (Perception)
+        input name="passiveperception" placeholder="10"
+        
+      div.otherprofs.box.textblock
+        label for="otherprofs" Other Proficiencies and Languages
+        textarea name="otherprofs"
+
+    section
+      section.combat
+        div.armorclass
+          div
+            label for="ac" Armor Class
+            input type="text" name="ac" placeholder="10"
+
+        div.initiative
+          div
+            label for="initiative" Initiative
+            input type="text" name="initiative" placeholder="+0"
+
+        div.speed
+          div
+            label for="speed" Speed
+            input type="text" name="speed" placeholder="30"
+
+        div.hp
+          div.regular
+            div.max
+              label for="maxhp" Hit Point Maximum
+              input type="text" name="maxhp" placeholder="10"
+            div.current
+              label for="currenthp" Current Hit Points
+              input type="text" name="currenthp"
+          div.temporary
+            label for="temphp" Temporary Hit Points
+            input type="text" name="temphp"
+
+        div.hitdice
+          div
+            div.total
+              label for="totalhd" Total
+              input type="text" name="totalhd" placeholder="2d10"
+            div.remaining
+              label for="remaininghd" Hit Dice
+              input type="text" name="remaininghd"
+
+        div.deathsaves
+          div
+            div.label
+              label Death Saves
+            div.marks
+              div.deathsuccesses
+                label Successes
+                div.bubbles
+                  - for i in [1,2,3] do
+                    input type="checkbox" name="deathsuccess#{i}"
+              div.deathfails
+                label Failures
+                div.bubbles
+                  - for i in [1,2,3] do
+                    input type="checkbox" name="deathfail#{i}"
+                    
+      section.attacksandspellcasting
+        div
+          label Attacks & Spellcasting
+          table
+            thead
+              tr
+                th Name
+                th Atk Bonus
+                th Damage/Type
+            tbody
+              -for i in [1,2,3] do
+                tr
+                  td
+                    input type="text" name="atkname#{i}"
+                  td
+                    input type="text" name="atkbonus#{i}"
+                  td
+                    input type="text" name="atkdamage#{i}"
+          textarea
+      section.equipment
+        div
+          label Equipment
+          div.money
+            ul
+              - for type in ["cp", "sp", "ep", "gp", "pp"] do
+                li
+                  label for="#{type}" #{type}
+                  input name="#{type}"
+          textarea placeholder="Equipment list here"
+            
+            
+    section
+      section.flavor
+        div.personality
+          label for="personality" Personality
+          textarea name="personality"
+          
+        div.ideals
+          label for="ideals" Ideals
+          textarea name="ideals"
+          
+        div.bonds
+          label for="bonds" Bonds
+          textarea name="bonds"
+          
+        div.flaws
+          label for="flaws" Flaws
+          textarea name="flaws"
+          
+      section.features
+        div
+          label for="features" Features & Traits
+          textarea name="features"
