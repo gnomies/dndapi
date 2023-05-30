@@ -5,7 +5,6 @@ import openai
 from dotenv import load_dotenv
 import sqlite3
 import datetime
-import dnd_utils
 import time
 
 def exponential_backoff(func, max_retries=5):
@@ -112,9 +111,10 @@ def get_random_race():
     return race
 
 def get_random_class():
-    classes = select_from_table('classes', ['class'])
-    _class = random.choice(classes)[0]
-    return _class
+    classes = select_from_table('classes', ['name', 'stat_order'])
+    _class, stat_order_str = random.choice(classes)
+    stat_order = stat_order_str.split(',')
+    return _class, stat_order
 
 def get_random_equipment():
     equipment_list = select_from_table('equipment', ['equipment'])
@@ -129,25 +129,31 @@ def generate_character_name(race):
     response = exponential_backoff(lambda: openai.Completion.create(engine="text-davinci-003", prompt= f"Generate a unique name for a {race} fantasy character ", max_tokens=30))
     return response.choices[0].text.strip()
 
+def roll_character_stats():
+    abilities = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
+    stats = {ability: roll_ability_score() for ability in abilities}
+    return stats
+
 def generate_character():
     race = get_random_race()
-    _class = get_random_class()
+    _class, stat_order = get_random_class()
+    stats = roll_character_stats()
+
+    # Sort the stats in the order required by the class
+    sorted_stats = [stats[stat] for stat in stat_order]
+
     equipment = get_random_equipment()
     name = generate_character_name(race)
-    stats = roll_character_stats()
+
     character = {
         "name": name,
         "race": race,
         "class": _class,
         "equipment": equipment,
-        "stats": stats,
+        "stats": sorted_stats,
     }
     return character
 
-def roll_character_stats():
-    abilities = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
-    stats = {ability: roll_ability_score() for ability in abilities}
-    return stats
 
 def generate_backstory(character):
     # Themes for the backstory chosen at random
@@ -158,17 +164,22 @@ def generate_backstory(character):
     return response.choices[0].text.strip()
 
 def output_to_database(character, backstory):
+    # Convert the stats list back into a comma-separated string
+    stats_str = ','.join(map(str, character['stats']))
+
     insert_into_table(
-        'characters', ['name', 'race', '_class', 'equipment', 'backstory'],
-        [character['name'], character['race'], character['class'], character['equipment'], backstory]
-        )
+        'characters', 
+        ['name', 'race', '_class', 'equipment', 'backstory', 'stats'],
+        [character['name'], character['race'], character['class'], character['equipment'], backstory, stats_str]
+    )
 
 if __name__ == "__main__":
     character = generate_character()
     print(character)
     backstory = generate_backstory(character)
-    print("Backstory:")
+    print(f"Backstory:")
     print(backstory)
+    
     output_to_database(character, backstory)
 
 conn.close()

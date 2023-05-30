@@ -1,3 +1,5 @@
+import sqlite3
+
 # stat_weights.py
 
 stat_weights = {
@@ -15,3 +17,34 @@ stat_weights = {
     'wizard': ['Intelligence', 'Constitution', 'Dexterity', 'Wisdom', 'Charisma', 'Strength'],
     'bloodhunter': ['Dexterity', 'Constitution', 'Intelligence', 'Strength', 'Charisma', 'Wisdom'],
 }
+
+# Create a connection to the database
+conn = sqlite3.connect('db\characters.db')
+cursor = conn.cursor()
+
+# Delete the existing table if it exists
+cursor.execute("DROP TABLE IF EXISTS classes")
+
+# Then, create the table
+cursor.execute('''
+    CREATE TABLE classes(
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        stat_order TEXT NOT NULL
+    )
+''')
+
+# Insert the classes and their stat orders into the database
+for i, (class_name, stat_order) in enumerate(stat_weights.items(), start=1):
+    # Serialize the stat order as a comma-separated string
+    stat_order_str = ','.join(stat_order)
+    
+    cursor.execute('''
+        INSERT INTO classes(id, name, stat_order)
+        VALUES (?, ?, ?)
+    ''', (i, class_name, stat_order_str))
+
+conn.commit()  # Commit the changes
+
+# Remember to close the connection when you're done
+conn.close()
