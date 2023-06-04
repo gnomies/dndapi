@@ -22,7 +22,7 @@
     <form action="/" method="POST">
         <button type="submit">Generate Character</button>
     </form>
-
+    
     {% if character %}
     <h2>Character:</h2>
     <p>Name: {{ character.name }}</p>
@@ -41,7 +41,7 @@
     <div class="container">
     <ul>
         <form action="/" method="GET">
-            <select name="class">
+            <select name="_class">
                 <option value="">All Classes</option>
                 {% for _class in classes %}
                 <option value="{{ _class }}">{{ _class }}</option>

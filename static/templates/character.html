@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ character.name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <style>
+        @media print {
+          .no-print {
+            display: none;
+          }
+        }
+      </style>
 </head>
 <body>
     <div class="character-info">
@@ -12,15 +19,29 @@
         <p><b>Race:</b> {{ character.race }}</p>
         <p><b>Class:</b> {{ character._class }}</p>
         <p><b>Equipment:</b> {{ character.equipment }}</p>
-        <div class="character-stats">
-            <h2>Stats</h2>
-            {% for stat, value in character.stats.items() %}
-                <p>{{ stat }}: {{ value }}</p>
-            {% endfor %}
+        <div class="stats">
+            <div class="stat"><h4>Strength:</h4><br>
+                {{ character.stats.Strength }}
+            </div>
+            <div class="stat"><h4>Dexterity:</h4><br>
+                {{ character.stats.Dexterity }}
+            </div>
+            <div class="stat"><h4>Constitution:</h4><br>
+                {{ character.stats.Constitution }}
+            </div>
+            <div class="stat"><h4>Intelligence:</h4><br>
+                {{ character.stats.Intelligence }}
+            </div>
+            <div class="stat"><h4>Wisdom:</h4><br>
+                {{ character.stats.Wisdom }}
+            </div>
+            <div class="stat"><h4>Charisma:</h4><br>
+                {{ character.stats.Charisma }}
+            </div>
         </div>
         <h2>Backstory:</h2></br>
         <p>{{ character.backstory }}</p>
-        <a href="/">Back to character list</a>
+        <a href="/" class="no-print">Back to character list</a>
     </div>
 </body>
 </html>

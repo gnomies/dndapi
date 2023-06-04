@@ -35,6 +35,7 @@ def home():
     characters = [dict(zip(["id", "name", "race", "_class", "equipment", "backstory", "stats"], character_tuple)) for character_tuple in character_tuples]
 
     new_character = None
+    backstory = None   # initialize backstory
     if request.method == 'POST':
         new_character = creator.generate_character()
         backstory = creator.generate_backstory(new_character)
@@ -79,9 +80,6 @@ def character(character_id):
 
     # Render a template for the character
     return render_template('character.html', character=character)
-
-
-
 
 if __name__ == '__main__':
     template_files = glob.glob('./static/**/*.html', recursive=True)

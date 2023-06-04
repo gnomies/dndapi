@@ -56,7 +56,7 @@ header nav a:hover {
 
 .container p {
   font-size: 1.2em;
-  color: #666;
+  color: #fff;
   line-height: 1.6;
 }
 
@@ -125,16 +125,68 @@ select option {
 
 /* Styling for the Character Info */
 .character-info {
-  background-color: #333;
-  color: #fff;
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
   padding: 20px;
+  background-color: #666;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.character-info h1 {
+  margin-top: 0;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.stat {
+  flex: 1 1 100px;
+  border: 1px solid #ddd;
   border-radius: 5px;
+  padding: 5px;
+  margin: 5px 0;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.character-stats {
-  border: 1px solid #000;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 100px;  /* Or whatever width you want */
+.stat h4 {
+  margin-top: 0;
+  margin-bottom: 0;
 }
-
+@media (max-width: 900px) {
+  .stats {
+      flex-direction: column;
+  }
+  .stat {
+      flex: 1 1 auto;
+  }
+}
+/* Add this at the bottom of your CSS */
+@media print {
+  body, .container {
+    width: 100%;
+    font-size: 12px;
+    color: #000;
+    background: #fff;
+  }
+  .character-info {
+    background-color: #fff;
+    box-shadow: none;
+    padding: 10px;
+  }
+  .stat {
+    border: none;
+    box-shadow: none;
+    padding: 2px;
+    margin: 2px 0;
+  }
+  /* Hide elements you don't want to print */
+  .no-print {
+    display: none;
+  }
+}

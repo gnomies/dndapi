@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 import sqlite3
 import datetime
 import time
+from flask import Flask, request, render_template
+app = Flask(__name__)
 
 def exponential_backoff(func, max_retries=5):
     wait_time = 1

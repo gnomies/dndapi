@@ -8,6 +8,7 @@ venv/
 # Ignore everything in the "build" directory,
 # except the "hello.exe" file:
 build/*
+playground/*
 
 # Ignore all .pdf files in the doc/ directory
 # and any of its subdirectories:
