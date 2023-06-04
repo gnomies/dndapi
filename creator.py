@@ -50,7 +50,7 @@ def create_table(table_name, fields):
 
 if __name__ == "__main__":
     # Define the fields for each table as lists of strings
-    character_fields = ["id INTEGER PRIMARY KEY", "name TEXT", "race TEXT", "_class TEXT", "equipment TEXT", "backstory TEXT", "stats TEXT"]
+    character_fields = ["id INTEGER PRIMARY KEY", "name TEXT", "race TEXT", "_class TEXT", "equipment TEXT", "backstory TEXT", "strength INTEGER", "dexterity INTEGER", "constitution INTEGER", "intelligence INTEGER", "wisdom INTEGER", "charisma INTEGER"]
     race_fields = ["id INTEGER PRIMARY KEY", "race TEXT"]
     class_fields = ["id INTEGER PRIMARY KEY", "class TEXT"]
     equipment_fields = ["id INTEGER PRIMARY KEY", "equipment TEXT"]
@@ -148,17 +148,20 @@ def generate_character_name(race):
     return response.choices[0].text.strip()
 
 def roll_character_stats():
-    abilities = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
-    stats = {ability: roll_ability_score() for ability in abilities}
+    # Roll 6 ability scores without assigning them to specific abilities yet
+    stats = [roll_ability_score() for _ in range(6)]
     return stats
 
 def generate_character():
     race = get_random_race()
     _class, stat_order = get_random_class()
-    stats = roll_character_stats()
 
-    # Create a list of stats in the order required by the class
-    sorted_stats = [stats[stat] for stat in stat_order]
+    # Roll stats and sort them in descending order, since higher ability scores are generally better
+    stats = sorted(roll_character_stats(), reverse=True)
+
+    # Map sorted stats to abilities based on class stat_order
+    abilities = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
+    sorted_abilities = {ability: stat for ability, stat in zip(stat_order, stats)}
 
     equipment = get_random_equipment()
     name = generate_character_name(race)
@@ -166,9 +169,9 @@ def generate_character():
     character = {
         "name": name,
         "race": race,
-        "class": _class,  # this should now be a string, not a tuple
+        "class": _class,
         "equipment": equipment,
-        "stats": sorted_stats,
+        "stats": sorted_abilities,
     }
     return character
 
@@ -182,13 +185,19 @@ def generate_backstory(character):
     return response.choices[0].text.strip()
 
 def output_to_database(character, backstory):
-    # Convert the stats list back into a comma-separated string
-    stats_str = ','.join(map(str, character['stats']))
+    # Extract the stats from the character in the order that matches your database
+    stats = character['stats']
+    strength = stats['Strength']
+    dexterity = stats['Dexterity']
+    constitution = stats['Constitution']
+    intelligence = stats['Intelligence']
+    wisdom = stats['Wisdom']
+    charisma = stats['Charisma']
 
     insert_into_table(
         'characters', 
-        ['name', 'race', '_class', 'equipment', 'backstory', 'stats'],
-        [character['name'], character['race'], character['class'], character['equipment'], backstory, stats_str]
+        ['name', 'race', '_class', 'equipment', 'backstory', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'],
+        [character['name'], character['race'], character['class'], character['equipment'], backstory, strength, dexterity, constitution, intelligence, wisdom, charisma]
     )
 
 if __name__ == "__main__":

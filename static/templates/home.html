@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Character Generator</h1>
+            <strong><nav>
+                <ul>
+                    <a href="/">Home</a></li>
+                    <a href="/characters">Characters</a></li>
+                </ul>
+                </nav></strong>
+    </header>
+    <div class="container">
+        <p>Generate a random character for your next D&D campaign!</p>
+    <form action="/" method="POST">
+        <button type="submit">Generate Character</button>
+    </form>
+
+    {% if character %}
+    <h2>Character:</h2>
+    <p>Name: {{ character.name }}</p>
+    <p>Race: {{ character.race }}</p>
+    <p>Class: {{ character._class }}</p>
+    <p>Equipment: {{ character.equipment }}</p>
+    <p>Stats: {{ character.stats }}</p>
+    {% endif %}
+
+    {% if backstory %}
+    <h2>Backstory:</h2>
+    <p>{{ backstory }}</p>
+    {% endif %}
+    </div>
+
+    <div class="container">
+    <ul>
+        <form action="/" method="GET">
+            <select name="class">
+                <option value="">All Classes</option>
+                {% for _class in classes %}
+                <option value="{{ _class }}">{{ _class }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Filter by Class</button>
+        </form>
+        
+        
+        {% if characters %}
+        <ul>
+            {% for character in characters %}
+            <li><a href="/character/{{ character.id }}">{{ character.name }}: a {{ character._class }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No characters match the selected class.</p>
+        {% endif %}
+    </ul>
+    </div>
+    
+
+</body>
+</html>
