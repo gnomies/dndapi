@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-import creator as creator
+import creator_openai as creator_openai
 import sqlite3
 import os
 import glob
@@ -37,9 +37,9 @@ def home():
     new_character = None
     backstory = None   # initialize backstory
     if request.method == 'POST':
-        new_character = creator.generate_character()
-        backstory = creator.generate_backstory(new_character)
-        creator.output_to_database(new_character, backstory)
+        new_character = creator_openai.generate_character()
+        backstory = creator_openai.generate_backstory(new_character)
+        creator_openai.output_to_database(new_character, backstory)
 
     return render_template('home.html', characters=characters, character=new_character, backstory=backstory)
 
