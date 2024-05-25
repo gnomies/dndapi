@@ -15,6 +15,6 @@ playground/*
 doc/**/*.pdf
 
 # Ignore all of the db files.
-*.db
-*.sqlite3
-*.sqlite
+#*.db
+#*.sqlite3
+#*.sqlite
