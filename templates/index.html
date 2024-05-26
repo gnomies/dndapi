@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Characters</title>
+    </head>
+    <body>
+        <h1>Characters</h1>
+        <ul>
+            {% for character in characters %}
+                <li>
+                    <a href="{{ url_for('character_detail', character_id=character[0]) }}">
+                        {{ character[1] }} ({{ character[3] }} - {{ character[2] }})
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('add_character') }}">Add Character</a>
+    </body>
+</html>
