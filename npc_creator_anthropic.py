@@ -115,7 +115,7 @@ def roll_ability_score():
 def generate_character_name(race):
     response = exponential_backoff(lambda: anthropic_client.messages.create(
         model="claude-3-sonnet-20240229",
-        max_tokens=20,
+        max_tokens=30,
         messages=[
             {"role": "user", "content": f"Generate a unique name for a {race} fantasy npc character"}
         ]
