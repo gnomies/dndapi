@@ -34,7 +34,7 @@ def create_table(table_name, fields):
 
 if __name__ == "__main__":
     # Define the fields for each table as lists of strings
-    character_fields = ["id INTEGER PRIMARY KEY AUTOINCREMENT", "name TEXT", "race TEXT", "_class TEXT", "equipment TEXT", "magic_item TEXT", "backstory TEXT", "strength INTEGER", "dexterity INTEGER", "constitution INTEGER", "intelligence INTEGER", "wisdom INTEGER", "charisma INTEGER"]
+    character_fields = ["id INTEGER PRIMARY KEY AUTOINCREMENT", "name TEXT", "race TEXT", "profession TEXT", "equipment TEXT", "magic_item TEXT", "backstory TEXT", "strength INTEGER", "dexterity INTEGER", "constitution INTEGER", "intelligence INTEGER", "wisdom INTEGER", "charisma INTEGER"]
     race_fields = ["id INTEGER PRIMARY KEY AUTOINCREMENT", "race TEXT"]
     class_fields = ["id INTEGER PRIMARY KEY AUTOINCREMENT", "class TEXT"]
     equipment_fields = ["id INTEGER PRIMARY KEY AUTOINCREMENT", "equipment TEXT"]
@@ -92,11 +92,11 @@ def get_random_race():
     race = random.choice(races)[0]
     return race
 
-def get_random_class():
+def get_randomprofession():
     classes = select_from_table('workplace', ['name', 'stat_order'])
-    _class, stat_order_str = random.choice(classes)
+    profession, stat_order_str = random.choice(classes)
     stat_order = stat_order_str.split(',')
-    return _class, stat_order
+    return profession, stat_order
 
 def get_random_equipment():
     equipment_list = select_from_table('equipment', ['name'])
@@ -130,7 +130,7 @@ def roll_character_stats():
 
 def generate_character():
     race = get_random_race()
-    _class, stat_order = get_random_class()
+    profession, stat_order = get_randomprofession()
     stats = sorted(roll_character_stats(), reverse=True)
     abilities = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
     sorted_abilities = {ability: stat for ability, stat in zip(stat_order, stats)}
@@ -140,7 +140,7 @@ def generate_character():
     character = {
         "name": name,
         "race": race,
-        "_class": _class,
+        "profession": profession,
         "equipment": equipment,
         "magic_item": magic_item,
         "stats": sorted_abilities,
@@ -150,7 +150,7 @@ def generate_character():
 def generate_backstory(character):
     themes = ["Comfort in Routine", "Lack of Ambition", "Fear of Failure", "Insecurity", "Acceptance of Fate", "Contentment with Role", "Past Trauma", "Desire for Peace", "Bound by Magic", "Connection to the World", "Loved Ones", "Unrequited Love", "Wisdom and Insight", "Duty and Responsibility"]
     theme = random.choice(themes)
-    prompt = f"Generate a {theme} short NPC backstory for a {character['race']} {character['_class']} named {character['name']} who carries a {character['equipment']} and a {character['magic_item']}, include a voice type and physical description that fits with their job title."
+    prompt = f"Generate a {theme} short NPC backstory for a {character['race']} {character['profession']} named {character['name']} who carries a {character['equipment']} and a {character['magic_item']}, include a voice type and physical description that fits with their job title."
     response = exponential_backoff(lambda: anthropic_client.messages.create(
         model="claude-3-sonnet-20240229",
         max_tokens=1000,
@@ -166,8 +166,8 @@ def output_to_database(character, backstory):
     stats = character['stats']
     insert_into_table(
         'characters', 
-        ['name', 'race', '_class', 'equipment', 'magic_item', 'backstory', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'],
-        [character['name'], character['race'], character['_class'], character['equipment'], character['magic_item'], backstory, stats['Strength'], stats['Dexterity'], stats['Constitution'], stats['Intelligence'], stats['Wisdom'], stats['Charisma']]
+        ['name', 'race', 'profession', 'equipment', 'magic_item', 'backstory', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'],
+        [character['name'], character['race'], character['profession'], character['equipment'], character['magic_item'], backstory, stats['Strength'], stats['Dexterity'], stats['Constitution'], stats['Intelligence'], stats['Wisdom'], stats['Charisma']]
     )
 
 if __name__ == "__main__":
