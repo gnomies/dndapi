@@ -10,9 +10,13 @@ venv/
 build/*
 playground/*
 
+
 # Ignore all .pdf files in the doc/ directory
 # and any of its subdirectories:
 doc/**/*.pdf
+
+# Ignore individual files in the:
+directory.txt
 
 # Ignore all of the db files.
 #*.db
